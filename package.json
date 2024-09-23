@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Setting up a professional backend application",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/index.js"
   },
   "keywords": [
     "node.js",
@@ -13,5 +14,8 @@
     "mongoose"
   ],
   "author": "Ankur Kumar",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
 }
