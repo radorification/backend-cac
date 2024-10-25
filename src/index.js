@@ -4,9 +4,9 @@ dotenv.config({
 });
 import connectDB from "./db/index.js";
 import express from "express";
+import {app} from "./app.js"
 
 
-const app = express();
 
 app.get('/', (req, res) => {
     res.send("<h3>Connection established!</h3>");
