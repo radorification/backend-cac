@@ -14,12 +14,14 @@ import fs from 'fs'
     const uploadOnCloudinary = async (localFilePath) => {
         try {
             if(!localFilePath)  return null;
+
             // storing file on Cloudinary
             const response = await cloudinary.uploader.upload(
                 localFilePath, {
                     resource_type: "auto"
                 }
             )
+            
             // when file is successfully uploaded on cloudinary
             console.log("File successfully uploaded on cloudinary", response.url);
             return response;
@@ -29,6 +31,7 @@ import fs from 'fs'
         }
     }
 
+    export {uploadOnCloudinary};
 
     // const uploadResult = await cloudinary.uploader
     //    .upload(
