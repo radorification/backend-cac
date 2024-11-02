@@ -16,8 +16,8 @@ const registerUser = asyncHandler( async (req, res) => {
 	// return response
     
     const {username, fullname, email, password} = req.body;
-    console.log("email :", email);
-	console.log("username :", username);
+    // console.log("email :", email);
+	 console.log(req.body);
 
 
     if([username, password, fullname, email].some((field) => field?.trim() == "")){
@@ -26,7 +26,7 @@ const registerUser = asyncHandler( async (req, res) => {
     }
 
 
-	const existingUser = User.findOne({
+	const existingUser = await User.findOne({
 		$or: [{username}, {email}]
 	});
 
@@ -35,8 +35,9 @@ const registerUser = asyncHandler( async (req, res) => {
 	}
 
 
-	const avatarLocalPath = req.files?.avatar[0]?.path;
-	const coverLocalPath = req.files?.cover[0]?.path;
+	const avatarLocalPath = req.files?.avatar?.[0]?.path;
+	const coverLocalPath = req.files?.coverImage?.[0]?.path;
+	
 
 	if(!avatarLocalPath){
 		throw new ApiError(400, "Avatar is required");
@@ -57,7 +58,7 @@ const registerUser = asyncHandler( async (req, res) => {
 		coverImage: coverImage?.url || "",
 		email,
 		password,
-		username: username
+		fullname
 	})
 
 	const createdUser = await User.findById(userInfo._id).select("-password -refreshToken");

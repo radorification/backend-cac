@@ -24,6 +24,7 @@ import fs from 'fs'
             
             // when file is successfully uploaded on cloudinary
             console.log("File successfully uploaded on cloudinary", response.url);
+            console.log(response);
             return response;
         } catch (error) {
             fs.unlinkSync(localFilePath) //removes the locally stored temporary file as upload failed!
