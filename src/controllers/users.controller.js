@@ -231,11 +231,10 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 	.json(new ApiResponse(200, {}, "Password changed successfully!"))
 })
 
-
 const fetchCurrentUser = asyncHandler(async(req, res) => {
 	return res
 	.status(200)
-	.json(200, req.user, "Current user fetched successfully!")
+	.json(new ApiResponse(200, req.user, "Current user fetched successfully!"))
 })
 
 const updateUsername = asyncHandler(async(req, res) => {
@@ -245,7 +244,7 @@ const updateUsername = asyncHandler(async(req, res) => {
 		throw new ApiError(400, "Username is required")
 	}
 
-	const user = User.findByIdAndUpdate(
+	const user = await User.findByIdAndUpdate(
 		req.user?._id,
 		{
 			$set: {
@@ -260,7 +259,6 @@ const updateUsername = asyncHandler(async(req, res) => {
 	.json(200, user, "Username updated successfully")
 })
 
-
 const updateFullname = asyncHandler(async(req, res) => {
 	const fullname = req.body
 
@@ -268,7 +266,7 @@ const updateFullname = asyncHandler(async(req, res) => {
 		throw new ApiError(400, "Username is required")
 	}
 
-	const user = User.findByIdAndUpdate(
+	const user = await User.findByIdAndUpdate(
 		req.user?._id,
 		{
 			$set: {
@@ -309,7 +307,6 @@ const updateUserAvatar = asyncHandler(async(req, res) => {
 	.status(200)
 	.json(200, user, "Avatar updated successfully")
 })
-
 
 const updateUserCoverImage = asyncHandler(async(req, res) => {
 	const coverImageLocalPath = req.file?.path
