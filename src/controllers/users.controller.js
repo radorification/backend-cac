@@ -335,6 +335,78 @@ const updateUserCoverImage = asyncHandler(async(req, res) => {
 	.json(200, user, "Cover Image updated successfully")
 })
 
+const getUserChannelProfile = asyncHandler(async(req, res) => {
+	const {username} = req.params
+
+	if(!username.trim()){
+		throw new ApiError(400, "Cannot find username")
+	}
+
+	const channel = await User.aggregate([
+		{
+			$match: {
+				username: username?.toLowerCase()
+			}
+		},
+		{
+			$lookup: {
+				from: "subscriptions", //field names in the DB are automatically converted to lowercase and plural (ref: Subscription schema)
+				localField: "_id",
+				foreignField: "channel",
+				as: "subscribers"
+			}
+		},
+		{
+			$lookup: {
+				from: "subscriptions", //field names in the DB are automatically converted to lowercase and plural (ref: Subscription schema)
+				localField: "_id",
+				foreignField: "subscriber",
+				as: "subscribedTo"
+			}
+		},
+		{
+			$addFields: {
+				subscribersCount: {
+					$size: "$subscribers"
+				},
+				channelsSubscribedTo: {
+					$size: "$subscribedTo"
+				},
+				isSubscribed: {
+					$cond: {
+						if: {$in: [req.user?._id, "$subscribers.subscriber"]},
+						then: true,
+						else: false
+					}
+				}
+			}
+		},
+		{
+			$project: {
+				username: 1,
+				fullname: 1,
+				email: 1,
+				avatar: 1,
+				coverImage: 1,
+				subscribersCount: 1,
+				channelsSubscribedTo: 1,
+				isSubscribed: 1
+			}
+		}
+		
+	])
+
+	if(!channel?.length){
+		throw new ApiError(400, "Channel does not exists!")
+	}
+
+	return res
+	.status(200)
+	.json(
+		new ApiResponse(200, "User channel fetched successfully")
+	)
+})
+
 export {registerUser,
 	loginUser,
 	logoutUser,
@@ -344,5 +416,6 @@ export {registerUser,
 	updateUsername,
 	updateFullname,
 	updateUserAvatar,
-	updateUserCoverImage
+	updateUserCoverImage,
+	getUserChannelProfile
 };
