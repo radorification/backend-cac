@@ -53,11 +53,13 @@ Use Postman or any other API testing software to test the endpoints listed below
 
 **User Profile Management:**
 
-- **POST /fetchCurrentUser**: Fetch the current user's information.
+- **GET /fetchCurrentUser**: Fetch the current user's information.
+- **GET /getWatchHistory**: Fetch the user's cover watch history.
 - **PATCH /updateUsername**: Update the username of the current user.
 - **PATCH /updateFullname**: Update the full name of the current user.
 - **PATCH /updateUserAvatar**: Upload or update the user's profile avatar.
 - **PATCH /updateUserCoverImage**: Upload or update the user's cover image.
+
 
 
 ## Notes
